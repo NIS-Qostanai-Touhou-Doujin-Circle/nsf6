@@ -1,0 +1,693 @@
+{% extends "base.html" %} {% block content %}
+<div
+	class="min-h-screen flex flex-col justify-between bg-primary-500 relative overflow-x-hidden"
+>
+	<!-- Header -->
+	<header
+		class="w-full py-6 px-4 md:px-12 flex flex-col md:flex-row items-center md:justify-between"
+	>
+		<div class="flex items-center gap-4 group cursor-pointer">
+			<div class="relative w-14 h-14 flex items-center justify-center rounded-full bg-primary-50 shadow-lg overflow-hidden transition-transform duration-500 group-hover:scale-110">
+				<img src="/static/assets/img/nsf.png" alt="NotSoFar logo" class="w-full h-full object-contain" />
+			</div>
+			<span class="text-3xl md:text-4xl font-bold text-white tracking-tight drop-shadow-sm select-none">Not so Far</span>
+		</div>
+		<nav
+			class="mt-4 md:mt-0 flex gap-6 text-primary-100 text-lg font-medium"
+		>
+			<a href="#data" class="group relative pb-1"
+				>Цифры<span
+					class="absolute left-0 bottom-0 h-0.5 w-0 bg-black group-hover:w-full transition-all duration-300"
+				></span
+			></a>
+			<a href="#features" class="group relative pb-1"
+				>Возможности<span
+					class="absolute left-0 bottom-0 h-0.5 w-0 bg-black group-hover:w-full transition-all duration-300"
+				></span
+			></a>
+			<a href="#tech" class="group relative pb-1"
+				>Технологии<span
+					class="absolute left-0 bottom-0 h-0.5 w-0 bg-black group-hover:w-full transition-all duration-300"
+				></span
+			></a>
+			<a href="#vision" class="group relative pb-1"
+				>Видение<span
+					class="absolute left-0 bottom-0 h-0.5 w-0 bg-black group-hover:w-full transition-all duration-300"
+				></span
+			></a>
+		</nav>
+	</header>
+
+	<!-- Hero Section -->
+	<section
+		class="flex-1 flex flex-col md:flex-row items-center justify-center gap-10 px-4 md:px-12 pt-6 pb-24 relative"
+	>
+		<div class="max-w-2xl text-center md:text-left space-y-6">
+			<h1
+				class="text-5xl md:text-6xl font-extrabold text-black leading-tight reveal"
+			>
+				Аналитика, которая усиливает бренд
+				<span class="block text-primary-900">а не риски</span>
+			</h1>
+			<p
+				class="text-xl md:text-2xl text-primary-900 font-medium reveal delay-100"
+			>
+				NotSoFar превращает поток анонимных геотреков inDrive в
+				стратегические решения и доверие пользователей.
+			</p>
+			<ul
+				class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-lg text-black/80 reveal delay-200"
+			>
+				<li
+					class="bg-amber-50/60 rounded-xl px-4 py-3 shadow-sm floaty"
+				>
+					GDPR-ready данные
+				</li>
+				<li
+					class="bg-amber-50/60 rounded-xl px-4 py-3 shadow-sm floaty"
+				>
+					Тепловые карты спроса
+				</li>
+				<li
+					class="bg-amber-50/60 rounded-xl px-4 py-3 shadow-sm floaty"
+				>
+					Аномалии и безопасность
+				</li>
+				<li
+					class="bg-amber-50/60 rounded-xl px-4 py-3 shadow-sm floaty"
+				>
+					AI автоэнкодеры
+				</li>
+			</ul>
+			<div
+				class="flex flex-col sm:flex-row gap-4 items-center sm:items-start reveal delay-300"
+			>
+				<a
+					href="/map"
+					target="_blank"
+					class="px-10 py-4 rounded-2xl bg-black text-primary-500 font-bold text-xl shadow-lg hover:scale-105 active:scale-100 transition-transform"
+				>
+					Демо прототип
+				</a>
+				<a
+					href="#problem"
+					class="text-black text-lg font-semibold underline decoration-primary-900/60 decoration-4 underline-offset-4 hover:decoration-black"
+					>Почему сейчас?</a
+				>
+			</div>
+		</div>
+		<div
+			class="w-full md:w-1/2 flex justify-center items-center reveal delay-200"
+		>
+			<div
+				class="w-80 h-80 md:w-[28rem] md:h-[28rem] bg-amber-50 rounded-3xl shadow-xl flex items-center justify-center relative"
+			>
+				<div class="w-3/4 h-3/4 overflow-hidden relative">
+					<img
+						src="/static/assets/img/diagram.png"
+						alt="Analytics diagram"
+						class="absolute top-1/2 left-1/2 -translate-1/2 hover:scale-150 transition-transform duration-300 ease-in-out h-full w-full object-cover"
+					/>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Scroll progress car path -->
+	<div class="fixed left-0 bottom-4 w-full pointer-events-none z-40 px-6">
+		<div class="relative max-w-5xl mx-auto">
+			<div
+				class="h-2 w-full bg-primary-900/30 rounded-full overflow-hidden"
+			>
+				<div
+					id="scroll-progress"
+					class="h-full bg-black/70 rounded-full transition-[width] duration-300 ease-out"
+					style="width: 0%"
+				></div>
+			</div>
+			<!-- Car placeholder -->
+			<div class="absolute -top-6" id="car-wrapper" style="left: 0%">
+				<img
+					src="/static/assets/img/car.png"
+					alt="car"
+					class="w-10 h-10 opacity-90 drop-shadow-md"
+				/>
+				<div
+					id="anomaly-badge"
+					class="absolute left-1/2 -translate-x-1/2 -top-12 bg-black text-primary-500 text-sm font-bold px-3 py-1 rounded-full shadow-lg opacity-0 scale-75 transition-all duration-500 pointer-events-auto select-none"
+				>
+					Аномалия обнаружена!
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Features Section -->
+	<section id="features" class="bg-amber-50 py-24 px-4 md:px-12">
+		<div class="max-w-6xl mx-auto">
+			<h2
+				class="text-4xl md:text-5xl font-extrabold text-primary-900 mb-12 reveal"
+				id="problem"
+			>
+				Мы устраняем системный риск данных
+			</h2>
+			<div class="grid md:grid-cols-3 gap-10">
+				<div class="card reveal floaty">
+					<h3 class="text-2xl font-bold text-primary-900 mb-3">
+						Анонимность = доверие
+					</h3>
+					<p class="text-black/80 text-lg">
+						Соответствие GDPR и локальному праву снижает риск
+						инцидентов и превращает приватность в бренд-актив.
+					</p>
+				</div>
+				<div class="card reveal delay-100 floaty">
+					<h3 class="text-2xl font-bold text-primary-900 mb-3">
+						AI в реальном времени
+					</h3>
+					<p class="text-black/80 text-lg">
+						Аномалии маршрутов, тепловые карты спроса и скорости —
+						всё автоматически.
+					</p>
+				</div>
+				<div class="card reveal delay-200 floaty">
+					<h3 class="text-2xl font-bold text-primary-900 mb-3">
+						Производительность
+					</h3>
+					<p class="text-black/80 text-lg">
+						Rust + Actix: миллионы точек с минимальной задержкой и
+						безопасностью памяти.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Data Impact Section -->
+	<section id="data" class="py-24 px-4 md:px-12 bg-white">
+		<div class="max-w-6xl mx-auto space-y-16">
+			<div class="text-center space-y-6">
+				<h2
+					class="text-4xl md:text-5xl font-extrabold text-primary-900 reveal"
+				>
+					Цена утечек и бездействия
+				</h2>
+				<p
+					class="text-xl text-black/80 max-w-3xl mx-auto reveal delay-100"
+				>
+					Без анонимизации данные превращаются в точку отказа: падение
+					восприятия бренда, юридические риски, затраты и потерянные
+					пользователи.
+				</p>
+			</div>
+			<div class="grid lg:grid-cols-4 gap-10">
+				<!-- Bar: Brand perception drop -->
+				<div
+					class="bg-amber-50 rounded-2xl p-6 shadow-md flex flex-col justify-between reveal floaty"
+					data-chart-group
+				>
+					<h3 class="text-xl font-bold text-primary-900 mb-4">
+						Падение восприятия
+					</h3>
+					<div class="h-48 flex items-end">
+						<div class="relative w-full h-full flex items-end">
+							<div
+								data-bar="141"
+								class="bar-brand w-full bg-primary-500 rounded-t-xl"
+								title="-141% после утечки"
+							></div>
+							<span
+								class="absolute top-2 left-1/2 -translate-x-1/2 text-black font-bold text-2xl"
+								>141%</span
+							>
+						</div>
+					</div>
+					<p class="mt-4 text-sm text-black/70">
+						Пример: Uber — падение потребительского восприятия после
+						инцидента.
+					</p>
+				</div>
+				<!-- Donut: Companies cease -->
+				<div
+					class="bg-amber-50 rounded-2xl p-6 shadow-md flex flex-col reveal floaty"
+					data-chart-group
+				>
+					<h3 class="text-xl font-bold text-primary-900 mb-4">
+						Компании могут не выжить
+					</h3>
+					<div class="relative mx-auto w-48 h-48">
+						<svg
+							viewBox="0 0 120 120"
+							class="w-full h-full rotate-[-90deg]"
+						>
+							<circle
+								cx="60"
+								cy="60"
+								r="52"
+								stroke="#e7e5e4"
+								stroke-width="16"
+								fill="none"
+							/>
+							<circle
+								id="donut-risk"
+								cx="60"
+								cy="60"
+								r="52"
+								stroke="currentColor"
+								stroke="var(--tw-ring-color)"
+								stroke-width="16"
+								fill="none"
+								class="text-primary-500"
+								stroke-linecap="round"
+								stroke-dasharray="326.72"
+								stroke-dashoffset="326.72"
+							></circle>
+						</svg>
+						<div
+							class="absolute inset-0 flex flex-col items-center justify-center rotate-0"
+						>
+							<span class="text-4xl font-extrabold text-black"
+								>60%</span
+							>
+							<span class="text-sm text-primary-900"
+								>риск закрытия</span
+							>
+						</div>
+					</div>
+					<p class="mt-4 text-sm text-black/70">
+						До 60% компаний могут прекратить деятельность после
+						серьёзной утечки.
+					</p>
+				</div>
+				<!-- Counter: Avg cost -->
+				<div
+					class="bg-amber-50 rounded-2xl p-6 shadow-md flex flex-col justify-between reveal floaty"
+					data-chart-group
+				>
+					<h3 class="text-xl font-bold text-primary-900 mb-4">
+						Средняя стоимость
+					</h3>
+					<div class="flex-1 flex items-center justify-center">
+						<span
+							class="text-5xl font-extrabold text-black"
+							data-counter-target="4.24"
+							data-decimals="2"
+							data-counter-prefix="$"
+							data-counter-suffix="M"
+							>$0.00M</span
+						>
+					</div>
+					<p class="mt-4 text-sm text-black/70">
+						Средняя стоимость инцидента утечки данных.
+					</p>
+				</div>
+				<!-- Users impacted -->
+				<div
+					class="bg-amber-50 rounded-2xl p-6 shadow-md flex flex-col justify-between reveal floaty"
+					data-chart-group
+				>
+					<h3 class="text-xl font-bold text-primary-900 mb-4">
+						Пользователи затронуты
+					</h3>
+					<div class="h-48 flex items-end">
+						<div class="w-full space-y-2 flex flex-col justify-end">
+							<div class="flex items-end gap-2">
+								<div
+									data-bar-users
+									class="bg-black h-0 w-6 rounded-t-lg"
+								></div>
+								<span
+									class="text-black font-bold text-2xl leading-none"
+								>
+									<span
+										data-counter-target="147"
+										data-counter-suffix="M"
+										class="inline-block"
+										>0M</span
+									>
+								</span>
+							</div>
+							<p class="text-sm text-black/70 leading-snug">
+								Equifax: 147 млн пользователей в одном
+								инциденте.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p class="text-center text-black/60 text-sm reveal">
+				Эти цифры подчёркивают стратегическую необходимость превентивной
+				анонимизации.
+			</p>
+		</div>
+	</section>
+
+	<!-- Tech Section -->
+	<section id="tech" class="py-24 px-4 md:px-12 bg-white">
+		<div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+			<div class="space-y-6 reveal">
+				<h2
+					class="text-4xl md:text-5xl font-extrabold text-primary-900"
+				>
+					Технологии
+				</h2>
+				<p class="text-black/80 text-lg leading-relaxed">
+					Гибкий высокопроизводительный движок строит новый слой
+					понимания города и качества поездок. Обучение без учителя
+					адаптируется к новым паттернам без ручной разметки.
+				</p>
+				<ul
+					class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-black/80 text-base"
+				>
+					<li class="bg-amber-100/70 rounded-lg px-4 py-3">
+						Rust + Actix
+					</li>
+					<li class="bg-amber-100/70 rounded-lg px-4 py-3">
+						Tailwind + TS
+					</li>
+					<li class="bg-amber-100/70 rounded-lg px-4 py-3">
+						Autoencoder AI
+					</li>
+					<li class="bg-amber-100/70 rounded-lg px-4 py-3">
+						Streaming ingest
+					</li>
+				</ul>
+			</div>
+			<div class="flex justify-center reveal delay-100">
+				<div
+					class="w-72 h-52 md:w-96 md:h-64 bg-primary-100 rounded-3xl flex items-center justify-center"
+				>
+					<!-- TODO: Replace with system architecture illustration -->
+					<span class="text-5xl text-primary-500">🦀</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Vision Section -->
+	<section id="vision" class="py-24 px-4 md:px-12 bg-primary-500 relative">
+		<div class="max-w-5xl mx-auto text-center space-y-8">
+			<h2 class="text-4xl md:text-5xl font-extrabold text-black reveal">
+				Дальше — экосистема решений
+			</h2>
+			<p class="text-xl md:text-2xl text-primary-900 reveal delay-100">
+				Мы строим фундамент для динамического ценообразования 2.0, Smart
+				City партнёрств и предиктивного сервиса.
+			</p>
+			<div class="grid md:grid-cols-2 gap-10 text-left">
+				<div
+					class="bg-amber-50/60 rounded-2xl p-6 shadow-md reveal floaty"
+				>
+					<h3 class="text-2xl font-bold text-primary-900 mb-3">
+						Следующие модули
+					</h3>
+					<ul class="space-y-2 text-black/80">
+						<li>• Интеллектуальные стимулы для водителей</li>
+						<li>• Предиктивное обслуживание автопарка</li>
+						<li>• Партнёрства Smart City</li>
+						<li>• Улучшенные ETA модели</li>
+					</ul>
+				</div>
+				<div
+					class="bg-amber-50/60 rounded-2xl p-6 shadow-md reveal delay-100 floaty"
+				>
+					<h3 class="text-2xl font-bold text-primary-900 mb-3">
+						Бизнес эффект
+					</h3>
+					<ul class="space-y-2 text-black/80">
+						<li>• Снижение времени ожидания</li>
+						<li>• Рост доверия и удержания</li>
+						<li>• Новые источники дохода</li>
+						<li>• Стратегическое позиционирование</li>
+					</ul>
+				</div>
+			</div>
+			<div class="reveal delay-200">
+				<a
+					href="mailto:team@notsofar.live"
+					class="inline-block px-10 py-4 rounded-2xl bg-black text-primary-500 font-bold text-xl shadow-lg hover:scale-105 active:scale-100 transition-transform"
+					>Связаться</a
+				>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer
+		class="w-full py-8 px-4 md:px-12 bg-primary-900 text-primary-100 text-center text-sm space-y-2"
+	>
+		<p>© 2025 Not so Far для inDrive. Все права защищены.</p>
+		<p class="text-primary-100/70">
+			Prototype build — confidential preview
+		</p>
+	</footer>
+</div>
+
+<!-- Modern fade-in-up animation -->
+<style>
+	@keyframes fade-in-up {
+		0% {
+			opacity: 0;
+			transform: translateY(40px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	.animate-fade-in-up {
+		opacity: 0;
+		animation: fade-in-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+	/* Reveal on scroll system */
+	.reveal {
+		opacity: 0;
+		transform: translateY(48px);
+		transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+			transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	.reveal.visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	.reveal.delay-100 {
+		transition-delay: 0.1s;
+	}
+	.reveal.delay-200 {
+		transition-delay: 0.2s;
+	}
+	.reveal.delay-300 {
+		transition-delay: 0.3s;
+	}
+	.reveal.delay-400 {
+		transition-delay: 0.4s;
+	}
+
+	/* Car subtle bob */
+	#car-wrapper img {
+		animation: car-bob 3s ease-in-out infinite;
+	}
+	@keyframes car-bob {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-4px);
+		}
+	}
+
+	/* Data section bars */
+	.bar-brand {
+		height: 0;
+		transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+		background: linear-gradient(
+			to top,
+			oklch(87.182% 0.20114 119.225),
+			oklch(0.892 0.214 123.22)
+		);
+	}
+	[data-bar-users] {
+		transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+		background: linear-gradient(to top, #000, oklch(0.892 0.214 123.22));
+	}
+
+	/* Fancy hovers */
+	.card {
+		position: relative;
+		overflow: hidden;
+	}
+	.card::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(
+			circle at 30% 20%,
+			oklch(0.892 0.214 123.22) / 0.25,
+			transparent 60%
+		);
+		opacity: 0;
+		transition: opacity 0.6s;
+		pointer-events: none;
+	}
+	.card:hover::before {
+		opacity: 1;
+	}
+	.card:hover {
+		transform: translateY(-4px) scale(1.015);
+		transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	.card {
+		transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 0.6s;
+	}
+	.card:hover {
+		box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.25);
+	}
+	a.group.relative.pb-1 {
+		transition: color 0.35s;
+	}
+	a.group.relative.pb-1:hover {
+		color: #000;
+	}
+
+	/* Floaty cards */
+	.floaty {
+		transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 0.8s;
+		will-change: transform;
+	}
+	.floaty:hover {
+		transform: translateY(-8px) scale(1.02);
+		box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.28);
+	}
+	.floaty:active {
+		transform: translateY(-2px) scale(0.99);
+		transition: transform 0.2s;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.floaty,
+		.floaty:hover,
+		.floaty:active {
+			transition: none;
+			transform: none !important;
+		}
+	}
+
+	/* Anomaly badge visible style */
+	#anomaly-badge.visible {
+		opacity: 1;
+		transform: translate(-50%, -4px) scale(1);
+	}
+	#anomaly-badge {
+		transform: translate(-50%, 4px) scale(0.75);
+	}
+</style>
+<script>
+	// Intersection Observer reveal animations
+	const observer = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((e) => {
+				if (e.isIntersecting) {
+					e.target.classList.add("visible");
+					observer.unobserve(e.target);
+				}
+			});
+		},
+		{ threshold: 0.12 }
+	);
+	document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+	// Scroll progress + car movement
+	const progressEl = document.getElementById("scroll-progress");
+	const carWrapper = document.getElementById("car-wrapper");
+	function updateProgress() {
+		const scrollTop = window.scrollY;
+		const docHeight =
+			document.documentElement.scrollHeight - window.innerHeight;
+		const p = docHeight > 0 ? scrollTop / docHeight : 0;
+		const pct = Math.min(100, Math.max(0, p * 100));
+		if (progressEl) progressEl.style.width = pct + "%";
+		if (carWrapper) carWrapper.style.left = `calc(${pct}% - 1.25rem)`; // center approx
+		// Anomaly badge toggle when bottom reached (>98%)
+		const badge = document.getElementById("anomaly-badge");
+		if (badge) {
+			if (pct > 98) {
+				badge.classList.add("visible");
+			} else {
+				badge.classList.remove("visible");
+			}
+		}
+	}
+	window.addEventListener("scroll", updateProgress, { passive: true });
+	window.addEventListener("resize", updateProgress);
+	updateProgress();
+
+	// Chart animations on reveal
+	function animateCharts() {
+		// Brand perception bar (141%) relative to a 150% scale -> height percentage
+		document.querySelectorAll(".bar-brand").forEach((bar) => {
+			const val = parseFloat(bar.getAttribute("data-bar")) || 0; // 141
+			const pct = Math.min(100, (val / 150) * 100); // scale
+			bar.style.height = pct + "%";
+		});
+		// Donut (60%)
+		const donut = document.getElementById("donut-risk");
+		if (donut) {
+			const radius = 52;
+			const circ = 2 * Math.PI * radius;
+			const target = 0.6; // 60%
+			donut.style.transition =
+				"stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)";
+			requestAnimationFrame(() => {
+				donut.style.strokeDashoffset = (1 - target) * circ;
+			});
+		}
+		// Users impacted bar (147M -> scale 150M)
+		const usersBar = document.querySelector("[data-bar-users]");
+		if (usersBar) {
+			usersBar.style.height = (147 / 150) * 100 + "%";
+		}
+		// Counters
+		const counters = document.querySelectorAll("[data-counter-target]");
+		counters.forEach((el) => {
+			const target = parseFloat(el.getAttribute("data-counter-target"));
+			const decimals = parseInt(
+				el.getAttribute("data-decimals") || "0",
+				10
+			);
+			const prefix = el.getAttribute("data-counter-prefix") || "";
+			const suffix = el.getAttribute("data-counter-suffix") || "";
+			let start = null;
+			const dur = 1400;
+			function step(ts) {
+				if (!start) start = ts;
+				const p = Math.min(1, (ts - start) / dur);
+				const val = target * p;
+				el.textContent = prefix + val.toFixed(decimals) + suffix;
+				if (p < 1) requestAnimationFrame(step);
+				else
+					el.textContent = prefix + target.toFixed(decimals) + suffix;
+			}
+			requestAnimationFrame(step);
+		});
+	}
+
+	// Trigger charts when section first revealed
+	const dataSection = document.getElementById("data");
+	if (dataSection) {
+		const obs = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((e) => {
+					if (e.isIntersecting) {
+						animateCharts();
+						obs.disconnect();
+					}
+				});
+			},
+			{ threshold: 0.25 }
+		);
+		obs.observe(dataSection);
+	}
+</script>
+{% endblock %}
