@@ -3,6 +3,11 @@ import { Heatmap } from "../types/heatmap";
 
 const polygonRemoveCallbacks: (() => void)[] = [];
 
+export function killHeatmap() {
+	polygonRemoveCallbacks.forEach((cb) => cb());
+	polygonRemoveCallbacks.length = 0;
+}
+
 /**
  * Render heatmap grid onto a given mapgl.Map instance.
  */
@@ -12,9 +17,7 @@ export function renderHeatmap(
 	heatmap: Heatmap,
 	colorblind: boolean
 ) {
-	// Kill old heatmap polygons
-	polygonRemoveCallbacks.forEach((cb) => cb());
-	polygonRemoveCallbacks.length = 0;
+	killHeatmap();
 
 	const maxCount = Math.max(
 		...heatmap.data.map((rect) => rect.count + rect.neighborCount * 0.125),

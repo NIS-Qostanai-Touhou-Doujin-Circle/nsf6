@@ -1,11 +1,13 @@
-import $ from "jquery";
+import $, { get } from "jquery";
 import getGL from "./2gis/get";
-import { renderHeatmap } from "./2gis/heatmap";
-import getHeatmap, { getMockHeatmap, makeRequest } from "./api/heatmap";
+import { killHeatmap, renderHeatmap } from "./2gis/heatmap";
+import getHeatmap, { getMockHeatmap, makeRequest as makeHeatmapRequest } from "./api/heatmap";
 import { MapPoint } from "./types/common";
 import { AdjustableUpdater } from "./helpers/adjustableUpdater";
 import { TimeSlider } from "./components/timeSlider";
 import astanaMap from "./helpers/astanaMap";
+import getAnomalies, { makeRequest as makeAnomalyRequest } from "./api/anomalies";
+import renderAnomalies, { killAnomalies } from "./2gis/anomalies";
 
 function getUpdateInterval(): number {
 	return parseInt($("#update-interval").val() as string) || 1000;
@@ -69,27 +71,44 @@ getGL().then((mapgl) => {
 			gridW = Math.min(20, Math.max(1, gridW));
 			gridH = Math.min(20, Math.max(1, gridH));
 
-			const request = makeRequest(
-				topLeft,
-				bottomRight,
-				gridW,
-				gridH,
-				startHour,
-				endHour,
-				undefined,
-				undefined,
-				undefined,
-				($("#heatmap-type").val() as "heatmap" | "trafficmap" | "speedmap") || "heatmap"
-			);
-			getHeatmap(request).then((res) => {
-				if ("error" in res) {
-					console.error("Heatmap error:", res.error);
-					return;
-				}
-				if (Object.entries(res).length >= 1) {
-					renderHeatmap(mapgl, map, Object.values(res)[0], $("#color-blind").is(":checked"));
-				}
-			});
+
+			if ($("#heatmap-type").val() === "anomalies") {
+				const request = makeAnomalyRequest(
+					topLeft,
+					bottomRight
+				);
+				getAnomalies(request).then((res) => {
+					killHeatmap();
+					if ("error" in res) {
+						console.error("Anomalies error:", res.error);
+						return;
+					}
+					renderAnomalies(mapgl, map, res.anomalies);
+				});
+			} else {
+				const request = makeHeatmapRequest(
+					topLeft,
+					bottomRight,
+					gridW,
+					gridH,
+					startHour,
+					endHour,
+					undefined,
+					undefined,
+					undefined,
+					($("#heatmap-type").val() as "heatmap" | "trafficmap" | "speedmap") || "heatmap"
+				);
+				getHeatmap(request).then((res) => {
+					killAnomalies();
+					if ("error" in res) {
+						console.error("Heatmap error:", res.error);
+						return;
+					}
+					if (Object.entries(res).length >= 1) {
+						renderHeatmap(mapgl, map, Object.values(res)[0], $("#color-blind").is(":checked"));
+					}
+				});
+			}
 		}, getUpdateInterval() / 1000);
 		updater.start(true);
 	});
