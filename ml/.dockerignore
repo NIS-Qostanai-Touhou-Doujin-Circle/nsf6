@@ -1,0 +1,15 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.swp
+.python-version
+.venv
+venv
+pip-wheel-metadata
+pip-log.txt
+.cache
+.idea
+.vscode
+artifacts/
