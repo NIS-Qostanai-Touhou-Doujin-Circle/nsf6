@@ -8,8 +8,10 @@ services:
     environment:
       - RUST_LOG=info
       - DATABASE_URL=postgres://nsf6:yourpassword@postgre:5432/nsf6_db
+      - POINTS_WEBHOOK_URL=http://model:8000/check_trip
     depends_on:
       - postgre
+      - model
       
   postgre:
     image: postgres:latest
@@ -19,6 +21,19 @@ services:
       - POSTGRES_DB=nsf6_db
     ports:
       - "5432:5432"
+
+  model:
+    build:
+      context: ./ml
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys,urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
 
 volumes:
   postgre:
